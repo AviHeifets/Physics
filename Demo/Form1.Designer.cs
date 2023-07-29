@@ -28,7 +28,18 @@
         /// </summary>
         private void InitializeComponent()
         {
+            components = new System.ComponentModel.Container();
+            timer1 = new System.Windows.Forms.Timer(components);
+            timer2 = new System.Windows.Forms.Timer(components);
             SuspendLayout();
+            // 
+            // timer1
+            // 
+            timer1.Tick += timer1_Tick;
+            // 
+            // timer2
+            // 
+            timer2.Tick += mouseDown;
             // 
             // Form1
             // 
@@ -38,11 +49,15 @@
             Name = "Form1";
             Text = "Form1";
             Load += Form1_Load;
-            KeyPress += Form1_KeyPress;
             MouseClick += Form1_MouseClick;
+            MouseDown += Form1_MouseDown;
+            MouseUp += Form1_MouseUp;
             ResumeLayout(false);
         }
 
         #endregion
+
+        private System.Windows.Forms.Timer timer1;
+        private System.Windows.Forms.Timer timer2;
     }
 }

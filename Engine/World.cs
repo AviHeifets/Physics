@@ -10,12 +10,14 @@ namespace Engine
     {
         public List<RigidBody> RigidBodies { get; set; }
 
-        public readonly float Gravity;
+        public static readonly Vec2 Gravity = new Vec2(0, 9.81f);
 
-        public World(float g)
+        private List<Collisions> CollisionBuffer;
+
+        public World()
         {
-            Gravity = g;
             RigidBodies = new List<RigidBody>();
+            CollisionBuffer = new List<Collisions>();
         }
 
         public void HandleColisions()
@@ -28,7 +30,7 @@ namespace Engine
                     RigidBody body2 = RigidBodies[j];
                     if (Collision.CircleVsCircle(body, body2, out float depth)) 
                     {
-                        Collision.OnColision(body, body2, depth);
+                        CollisionBuffer.Add(new Collisions(body, body2, depth));
                     }   
                 }
             }
@@ -50,6 +52,36 @@ namespace Engine
             RigidBodies.Clear();
         }
 
+        public void Update(float deltaTime)
+        {
+            foreach (Collisions coliision in CollisionBuffer)
+            {
+                Collision.OnColision(coliision.A, coliision.B, coliision.Depth);
+            }
+            foreach (RigidBody body in RigidBodies)
+            {
+                body.ApplyForce(Gravity);
+                body.Update(deltaTime);
+            }
 
+            CollisionBuffer.Clear();
+            
+        }
+
+
+
+        private struct Collisions
+        {
+            public RigidBody A { get; set; }
+            public RigidBody B { get; set; }
+            public float Depth { get; set; }
+
+            public Collisions(RigidBody a, RigidBody b, float depth)
+            {
+                this.A = a;
+                this.B = b;
+                this.Depth = depth;
+            }
+        }
     }
 }

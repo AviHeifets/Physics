@@ -25,10 +25,10 @@ namespace Engine
 
         public static void OnColision(RigidBody a, RigidBody b, float depth)
         {
-            Vec2 CNormal = new Vec2(a.Position - b.Position);
+            Vec2 CNormal = new Vec2( b.Position - a.Position );
             CNormal = VectorMath.Normalize(CNormal);
-            a.Move(CNormal.X * depth, CNormal.Y * depth);
-            b.Move(-CNormal.X * depth, -CNormal.Y * depth);
+            a.ApplyForce(new Vec2(-CNormal.X * depth, -CNormal.Y * depth));
+            b.ApplyForce(new Vec2(CNormal.X * depth, CNormal.Y * depth));
         }
     }
 }

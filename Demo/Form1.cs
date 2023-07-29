@@ -8,84 +8,70 @@ namespace Demo
 {
     public partial class Form1 : Form
     {
-        Graphics g;
-        Pen pen;
-        World world = new World(9.81f);
+
+        World world = new World();
         float speed = 5;
         public Form1()
         {
             InitializeComponent();
-            g = base.CreateGraphics();
-            pen = new Pen(Color.Black, 3);
-
         }
 
         private void Form1_Load(object sender, EventArgs e)
         {
-
+            DoubleBuffered = true;
+            timer1.Start();
         }
+
+
 
         private void Form1_MouseClick(object sender, MouseEventArgs e)
         {
-            Random rnd = new Random();
-            RigidBody body = new RigidBody(new Vec2(rnd.Next(400), rnd.Next(400)),false, rnd.Next(50));
-            world.RigidBodies.Add(body);
-            DrawCircle(body);
-
         }
 
-        private void DrawCircle(RigidBody circle)
+        protected override void OnPaint(PaintEventArgs e)
         {
-            g.DrawEllipse(pen, circle.Position.X, circle.Position.Y, circle.Radius, circle.Radius);
+            base.OnPaint(e);
+
+            Graphics g = e.Graphics;
+
             Brush brush = new SolidBrush(Color.Red);
-            g.FillEllipse(brush, circle.Position.X, circle.Position.Y, circle.Radius, circle.Radius);
-        }
-
-        public void DrawWorld(List<RigidBody> circles)
-        {
-            SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
-            SetStyle(ControlStyles.AllPaintingInWmPaint, true);
-            g.CompositingMode = CompositingMode.SourceOver;
-            g.CompositingQuality = CompositingQuality.HighSpeed;
-            g.InterpolationMode = InterpolationMode.NearestNeighbor;
-            g.PixelOffsetMode = PixelOffsetMode.Half;
-            g.SmoothingMode = SmoothingMode.HighSpeed;
-            g.Clear(Color.White);
 
             world.HandleColisions();
 
             foreach (RigidBody body in world.RigidBodies)
             {
-                DrawCircle(body);
+                float diameter = (body.Radius * 2);
+                float x = (body.Position.X - body.Radius);
+                float y = (body.Position.Y - body.Radius);
+                g.FillEllipse(brush, x, y, diameter, diameter);
             }
         }
 
-        private void Form1_KeyPress(object sender, KeyPressEventArgs e)
+        private void timer1_Tick(object sender, EventArgs e)
         {
-            if (e.KeyChar == 's')
-            {
-                world.RigidBodies[0].Move(new Vec2(0, speed));
-                DrawWorld(world.RigidBodies);
-            }
-            if (e.KeyChar == 'w')
-            {
-                world.RigidBodies[0].Move(new Vec2(0, -speed));
-                DrawWorld(world.RigidBodies);
-            }
-            if (e.KeyChar == 'd')
-            {
-                world.RigidBodies[0].Move(new Vec2(speed, 0));
-                DrawWorld(world.RigidBodies);
-            }
-            if (e.KeyChar == 'a')
-            {
-                world.RigidBodies[0].Move(new Vec2(-speed, 0));
-                DrawWorld(world.RigidBodies);
+            timer1.Interval = 16;
+            float deltaTime = timer1.Interval / 1000f;
+            world.Update(deltaTime);
+            Invalidate();
+        }
 
-            }
+        private void mouseDown(object sender, EventArgs e)
+        {
+            timer2.Interval = 16;
+            Random rnd = new Random();
+            RigidBody body = new RigidBody(new Vec2(rnd.Next(1920), rnd.Next(1080)), false, rnd.Next(50));
+            world.RigidBodies.Add(body);
 
         }
 
-       
+        private void Form1_MouseDown(object sender, MouseEventArgs e)
+        {
+            timer2.Start();
+        }
+
+        private void Form1_MouseUp(object sender, MouseEventArgs e)
+        {
+            timer2.Stop();
+        }
     }
 }
