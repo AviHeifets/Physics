@@ -8,6 +8,10 @@ namespace Engine
 {
     public static class VectorMath
     {
+        public static float Length(Vec2 vec)
+        {
+            return (float)Math.Sqrt(vec.X * vec.X + vec.Y * vec.Y);
+        }
         public static float Distance(Vec2 a, Vec2 b)
         {
             return (float)Math.Sqrt((a.X - b.X) * (a.X - b.X) + (a.Y - b.Y) * (a.Y - b.Y));

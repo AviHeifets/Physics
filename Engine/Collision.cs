@@ -8,31 +8,27 @@ namespace Engine
 {
     public static class Collision
     {
-        public static bool CircleVsCircle(Circle a, Circle b, out float depth)
+        public static bool CircleVsCircle(RigidBody a, RigidBody b, out float depth)
         {
-            float distance = VectorMath.Distance(a.Center, b.Center);
+            depth = 0;
+            float distance = VectorMath.Distance(a.Position, b.Position);
             float radii = a.Radius + b.Radius;
-
-            depth = radii - distance;
 
             if (distance >= radii)
             {
                 return false;
             }
+
+            depth = radii - distance;
             return true;
         }
 
-        public static void OnColision(Circle a, Circle b)
+        public static void OnColision(RigidBody a, RigidBody b, float depth)
         {
-            if (CircleVsCircle(a, b, out float depth))
-            {
-                Vec2 CNormal = new Vec2(a.Center - b.Center);
-                a.Move(CNormal.X * depth, CNormal.Y * depth);
-                b.Move(-CNormal.X * depth, -CNormal.Y * depth);
-            }
+            Vec2 CNormal = new Vec2(a.Position - b.Position);
+            CNormal = VectorMath.Normalize(CNormal);
+            a.Move(CNormal.X * depth, CNormal.Y * depth);
+            b.Move(-CNormal.X * depth, -CNormal.Y * depth);
         }
-
-
-
     }
 }

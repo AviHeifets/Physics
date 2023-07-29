@@ -21,13 +21,13 @@ Console.WriteLine(VectorMath.Dot(v2, v1));
 Console.WriteLine(Vector2.Dot(v3, v4));
 
 Random rnd = new Random();
-Circle circle1 = new Circle(new Vec2(5, 5), 5);
-Circle circle2 = new Circle(new Vec2(0, 14.5f), 5);
+RigidBody circle1 = new RigidBody();
+RigidBody circle2 = new RigidBody();
 
 Console.WriteLine(Collision.CircleVsCircle(circle1,circle2, out float depth));
 Console.WriteLine(depth);
 
 circle1.Move(new Vec2(-3, 5));
 
-Console.WriteLine(circle1.Direction); 
+Console.WriteLine(circle1.Velocity); 
 

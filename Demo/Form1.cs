@@ -10,15 +10,13 @@ namespace Demo
     {
         Graphics g;
         Pen pen;
-        List<Circle> circles;
+        World world = new World(9.81f);
         float speed = 5;
         public Form1()
         {
             InitializeComponent();
             g = base.CreateGraphics();
             pen = new Pen(Color.Black, 3);
-            circles = new List<Circle>();
-           
 
         }
 
@@ -30,20 +28,20 @@ namespace Demo
         private void Form1_MouseClick(object sender, MouseEventArgs e)
         {
             Random rnd = new Random();
-            Circle circle = new Circle(new Vec2((float)rnd.Next(200), (float)rnd.Next(200)), rnd.Next(5, 100));
-            circles.Add(circle);
-            DrawCircle(circle);
-            
+            RigidBody body = new RigidBody(new Vec2(rnd.Next(400), rnd.Next(400)),false, rnd.Next(50));
+            world.RigidBodies.Add(body);
+            DrawCircle(body);
+
         }
 
-        private void DrawCircle(Circle circle)
+        private void DrawCircle(RigidBody circle)
         {
-            g.DrawEllipse(pen, circle.Center.X, circle.Center.Y, circle.Radius, circle.Radius);
+            g.DrawEllipse(pen, circle.Position.X, circle.Position.Y, circle.Radius, circle.Radius);
             Brush brush = new SolidBrush(Color.Red);
-            g.FillEllipse(brush, circle.Center.X, circle.Center.Y, circle.Radius, circle.Radius);
+            g.FillEllipse(brush, circle.Position.X, circle.Position.Y, circle.Radius, circle.Radius);
         }
 
-        public void DrawWorld(List<Circle> circles)
+        public void DrawWorld(List<RigidBody> circles)
         {
             SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
             SetStyle(ControlStyles.AllPaintingInWmPaint, true);
@@ -54,11 +52,11 @@ namespace Demo
             g.SmoothingMode = SmoothingMode.HighSpeed;
             g.Clear(Color.White);
 
-            CheckColisions();
+            world.HandleColisions();
 
-            foreach (Circle circle in circles)
+            foreach (RigidBody body in world.RigidBodies)
             {
-                DrawCircle(circle);
+                DrawCircle(body);
             }
         }
 
@@ -66,39 +64,28 @@ namespace Demo
         {
             if (e.KeyChar == 's')
             {
-                circles[0].Move(new Vec2(0, speed));
-                DrawWorld(circles);
+                world.RigidBodies[0].Move(new Vec2(0, speed));
+                DrawWorld(world.RigidBodies);
             }
             if (e.KeyChar == 'w')
             {
-                circles[0].Move(new Vec2(0, -speed));
-                DrawWorld(circles);
+                world.RigidBodies[0].Move(new Vec2(0, -speed));
+                DrawWorld(world.RigidBodies);
             }
             if (e.KeyChar == 'd')
             {
-                circles[0].Move(new Vec2(speed, 0));
-                DrawWorld(circles);
+                world.RigidBodies[0].Move(new Vec2(speed, 0));
+                DrawWorld(world.RigidBodies);
             }
             if (e.KeyChar == 'a')
             {
-                circles[0].Move(new Vec2(-speed, 0));
-                DrawWorld(circles);
+                world.RigidBodies[0].Move(new Vec2(-speed, 0));
+                DrawWorld(world.RigidBodies);
 
             }
 
         }
 
-        private void CheckColisions()
-        {
-            for (int i = 0; i < circles.Count; i++)
-            {
-                Circle circle = circles[i];
-                for ( int j = i + 1; j < circles.Count; j++)
-                {
-                    Circle circle2 = circles[j];
-                    Collision.OnColision(circle, circle2);
-                }
-            }
-        }
+       
     }
 }
