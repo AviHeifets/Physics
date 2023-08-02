@@ -20,7 +20,7 @@ namespace Engine
             CollisionBuffer = new List<Collisions>();
         }
 
-        public void HandleColisions()
+        public void HandleColisions(float deltaTime)
         {
             for (int i = 0; i < RigidBodies.Count; i++)
             {
@@ -34,6 +34,7 @@ namespace Engine
                     }   
                 }
             }
+            Update(deltaTime);
         }
 
 

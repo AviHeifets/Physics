@@ -9,16 +9,18 @@ namespace Engine
     public class RigidBody
     {
         public Vec2 Position { get; set; }
-        public Vec2 LastPos { get; set; }
-        public Vec2 Velocity { get; set; } // TODO: make private when figured
         public float Radius { get; set; }
-        public float Mass { get; set; }  //TODO: add mass
+
+        private float mass;
+        private Vec2 lastPos;
+        private float density;
+        private Vec2 velocity;
 
         public RigidBody(Vec2 pos, bool isStatic, float radius)
         {
             this.Position = pos;
-            this.LastPos = Position;
-            this.Velocity = Vec2.ZeroVec();
+            this.lastPos = Position;
+            this.velocity = Vec2.ZeroVec();
             this.IsStatic = isStatic;
             this.Radius = radius;
         }
@@ -26,27 +28,55 @@ namespace Engine
 
         //public void Move(Vec2 direction)
         //{
-        //    LastPos = Position;
+        //    lastPos = Position;
         //    this.Position += direction;
         //}
 
         //public void Move(float x, float y)
         //{
-        //    LastPos = Position;
+        //    lastPos = Position;
         //    this.Position += new Vec2(x, y);
         //}
 
         public void ApplyForce(Vec2 force)
         {
-            Velocity += force;
+            if (!IsStatic)
+                velocity += force;
         }
 
         public void Update(float deltaTime)
         {
             if (!IsStatic)
-                this.Position += new Vec2(Velocity.X * deltaTime , Velocity.Y * deltaTime);
+                this.Position += new Vec2(velocity.X * deltaTime, velocity.Y * deltaTime);
+            Confinment();
+
         }
 
+        private void Confinment()
+        {
+            if (Position.X - Radius < 0)
+            {
+                Position = new Vec2(Radius, Position.Y);
+                velocity.X = 0;
+            }
+            else if (Position.X + Radius > 1500)
+            {
+                Position = new Vec2(1500 - Radius, Position.Y);
+                velocity.X = 0;
+            }
+
+            if (Position.Y - Radius < 0)
+            {
+                Position = new Vec2(Position.X, Radius);
+                velocity.Y = 0;
+            }
+            else if (Position.Y + Radius > 800)
+            {
+                Position = new Vec2(Position.X, 800 - Radius);
+                velocity.Y = 0;
+            }
+
+        }
     }
 }
 

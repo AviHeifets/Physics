@@ -16,6 +16,10 @@ namespace Engine
         {
             return (float)Math.Sqrt((a.X - b.X) * (a.X - b.X) + (a.Y - b.Y) * (a.Y - b.Y));
         }
+        public static float DistanceSquared(Vec2 a, Vec2 b)
+        {
+            return (a.X - b.X) * (a.X - b.X) + (a.Y - b.Y) * (a.Y - b.Y);
+        }
 
         public static Vec2 Normalize(Vec2 a)
         {

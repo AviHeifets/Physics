@@ -34,6 +34,8 @@ namespace Demo
 
             Graphics g = e.Graphics;
 
+            Pen pen = new Pen(Color.Black, 1);
+
             Brush brush = new SolidBrush(Color.Red);
 
             world.HandleColisions();
@@ -44,6 +46,7 @@ namespace Demo
                 float x = (body.Position.X - body.Radius);
                 float y = (body.Position.Y - body.Radius);
                 g.FillEllipse(brush, x, y, diameter, diameter);
+                g.DrawEllipse(pen, x, y, diameter, diameter);
             }
         }
 
