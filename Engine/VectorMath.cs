@@ -32,5 +32,10 @@ namespace Engine
             return a.X * b.X + a.Y * b.Y;
         }
 
+        public static Vec2 CollisionPosition(RigidBody a, RigidBody b)
+        {
+            return new Vec2 ((a.Position.X * b.Radius + b.Position.X * a.Radius) / a.Radius + b.Radius, (a.Position.Y * b.Radius + b.Position.Y * a.Radius) / a.Radius + b.Radius ); 
+        }
+
     }
 }

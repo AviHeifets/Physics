@@ -70,7 +70,6 @@ namespace Engine
         }
 
 
-
         private struct Collisions
         {
             public RigidBody A { get; set; }

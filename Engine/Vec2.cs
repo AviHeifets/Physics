@@ -44,6 +44,11 @@ namespace Engine
             return new Vec2(first.X * other.X, first.Y * other.Y);
         }
 
+        static public Vec2 operator *(Vec2 first, float other)
+        {
+            return new Vec2(first.X * other, first.Y * other);
+        }
+
         static public Vec2 operator /(Vec2 first, Vec2 other)
         {
             return new Vec2(first.X / other.X, first.Y / other.Y);

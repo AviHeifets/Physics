@@ -56,7 +56,8 @@ namespace Display
 
         private void AddObject(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            RigidBody body = new RigidBody(new Vec2(rnd.Next(1920), rnd.Next(1080)), false, rnd.Next(50));
+            float radius = rnd.Next(50);
+            RigidBody body = new RigidBody(new Vec2(rnd.Next(1920), rnd.Next(1080)), false, radius, 3.41f * radius * radius);
             world.RigidBodies.Add(body);
         }
 
